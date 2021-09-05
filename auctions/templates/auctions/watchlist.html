@@ -1,0 +1,26 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>My watchlist</h2>
+    <div>
+
+
+  <ol>
+    {% for item in items %}
+    <li>
+
+      <a href="{% url 'placebid' item.item_id %}">Title: <strong>{{ item.title }}</strong></a>  <br>
+
+      Price: {{ item.starting_bid }}<br>
+      <img src="{{ item.photo_url }}" height=300 ><br>
+      Category: {{ item.category }}<br>
+      <!-- Posted on: {{ item.post_date }}<br>  <br> -->
+
+    </li>
+
+  {% endfor %}
+  </ol>
+    </div>
+
+
+{% endblock %}

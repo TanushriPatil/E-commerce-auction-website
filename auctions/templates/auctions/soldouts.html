@@ -1,0 +1,27 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Sold Outs</h2>
+    <div>
+
+  <ol>
+    {% for item in items %}
+    <li>
+
+      Title: <strong>{{ item.title }}</strong> <br>
+      Price: Rs. {{ item.starting_bid }}<br>
+      <img src="{{ item.photo_url }}" height=300 ><br>
+      Category: {{ item.category }}<br>
+      Posted on: {{ item.post_date }}<br>  <br>
+      Closed on: {{ item.end_date }} <br>
+      Sold to: @{{ item.busername }}<br>
+      Sold at: Rs. {{ item.end_bid }}<br>
+
+    </li>
+
+  {% endfor %}
+  </ol>
+    </div>
+
+
+{% endblock %}

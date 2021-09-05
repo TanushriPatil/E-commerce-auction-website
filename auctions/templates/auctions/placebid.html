@@ -1,0 +1,109 @@
+
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>{{item.title}}</h2>
+  <div>
+      {% if msg3 %}
+        {{ msg3 }}
+        <strong>Hightest bidder: {{soldtoname}} - Rs. {{soldat}}  </strong>
+        <br>
+
+      Title: <strong>{{ item.title }}</strong> <br>
+      Category: {{ item.category }}<br>
+      <img src="{{ item.photo_url }}" height=300 ><br>
+      Price: {{ item.starting_bid }}<br>
+      {% if item.description %}
+      Description: {{ item.description }}<br>
+      {% endif %}
+      <br>
+      Posted on: {{ item.post_date }}<br>
+      Posted by: {{item.username}}<br>
+      {% else %}
+
+            Title: <strong>{{ item.title }}</strong> <br>
+            Category: {{ item.category }}<br>
+            <img src="{{ item.photo_url }}" height=300 ><br>
+            Price: {{ item.starting_bid }}<br>
+            Description: {{ item.description }}<br>
+            <br>
+              {% if not msg4 %}
+              <form action="{% url 'watchlist' item.id %}" method="post">
+                {% csrf_token %}
+
+                <input class="btn btn-primary" id="watchlist" name="add" type="submit" value="Add to watchlist">
+                </form>
+              {% else %}
+              <form action="{% url 'watchlistRemove' item.id %}" method="post">
+                {% csrf_token %}
+
+                <input class="btn btn-secondary" id="watchlist1" name="remove" type="submit" value="Remove from watchlist">
+              </form>
+              <br>
+
+                {{msg4}}
+              {% endif %}
+            <br>
+            Posted on: {{ item.post_date }}<br>
+            Posted by: @{{item.username}}<br>
+
+  {% if user.is_authenticated %}
+
+    {% if user == item.username %}
+      <form action="{% url 'soldOutView' item.id %}" method="post">
+        {% csrf_token %}
+        <input class="btn btn-secondary" type="submit" value="Close bid">
+      </form>
+    {% endif %}
+
+
+      <br><h3>Bids:</h3>
+      <br>  No. of bids till now: {{ count }} <br>
+
+        <form action="{% url 'placebid' item.id %}" method="post">
+          {% csrf_token %}
+          <input type="number" name="mybid" min=item.starting_bid id="myid" placeholder="Bid">
+          <input class="btn btn-primary" type="submit" value="Place bid">
+        </form>
+  {% if msg %}
+    {{msg}}
+  {% endif %}
+
+  {% if bids %}
+
+    <ul>
+
+      {% for bid in bids %}
+          <li>Rs. {{bid.new_bid}} by @{{bid.username}} on {{bid.bid_date}}</li>
+      {% endfor %}
+
+    </ul>
+  {% endif %}
+
+      <h3>Comments:</h3>
+        <form action="{% url 'placebid' item.id %}" method="post">
+          {% csrf_token %}
+          <input type="text" name="comment" id="comment" placeholder="Drop a comment!">
+          <input class="btn btn-primary" type="submit" value="Post">
+        </form>
+        {% if msg2 %}
+          {{msg2}}
+        {% endif %}
+        <br>
+      {% if comments %}
+          <ul>
+            {% for comment in comments %}
+                <li>{{comment.comment}} by @{{comment.username}}</li>
+            {% endfor %}
+
+          </ul>
+
+    {% endif %}
+
+      {% endif %}
+
+{% endif %}
+  </div>
+
+
+{% endblock %}
